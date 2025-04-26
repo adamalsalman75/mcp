@@ -1,0 +1,24 @@
+spring:
+  ai:
+    mcp:
+      server:
+        name: webmvc-mcp-server
+        version: 1.0.0
+        type: SYNC
+        sse-message-endpoint: /mcp/messages
+        enabled: true
+logging:
+  level:
+    org.springframework.ai: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.ai.mcp: TRACE
+    io.modelcontextprotocol: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,mappings
+  endpoint:
+    health:
+      show-details: always

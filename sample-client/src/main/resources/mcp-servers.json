@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "adam-mcp-server": {
+      "command": "/Users/adam/.sdkman/candidates/java/current/bin/java",
+      "args": [
+        "-jar",
+        "/Users/adam/projects/mcp/sample-server-stdio/target/sample-server-stdio-0.0.1-SNAPSHOT.jar"
+      ]
+    }
+  }
+}
