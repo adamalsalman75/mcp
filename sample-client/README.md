@@ -10,12 +10,13 @@ This module is a Spring Boot application that uses Spring AI to interact with Mo
 
 ## Endpoints
 
-- `/client/tools` - Returns a list of available tools from connected MCP servers
-- `/client/courses` - Returns a list of courses from connected MCP servers
+- `/tools` - Returns a list of available tools from connected MCP servers
+- `/adam` - Returns a list of what Adam has to offer from MCP servers
 
 ## Configuration
-
-The client is configured to connect to MCP servers defined in the `mcp-servers.json` file. By default, it connects to the sample-server-stdio module.
+The client is configured to connect to MCP servers defined in `application.yaml`
+The client is currently using SSE MCP server endpoint.
+The STDIO configuration `mcp-servers.json` file which isn't currently being used.
 
 ## Usage
 
