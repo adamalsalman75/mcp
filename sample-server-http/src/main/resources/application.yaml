@@ -5,7 +5,6 @@ spring:
         name: webmvc-mcp-server
         version: 1.0.0
         type: SYNC
-        sse-message-endpoint: /mcp/messages
         enabled: true
 logging:
   level:

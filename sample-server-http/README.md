@@ -10,8 +10,7 @@ This module is a Spring Boot application that implements a Model Context Protoco
 
 ## Endpoints
 
-- `/mcp/messages` - SSE endpoint for clients to subscribe to events
-- `/trigger-event` - Endpoint to trigger a test event
+- `/sse` - SSE endpoint for clients to subscribe to events
 
 ## Tools
 
@@ -19,7 +18,7 @@ This module is a Spring Boot application that implements a Model Context Protoco
 
 ## Configuration
 
-The server is configured as an MCP server named "webmvc-mcp-server" with SSE message endpoint at "/mcp/messages". It's configured to be of type SYNC and has debugging enabled for Spring AI and MCP-related components.
+The server is configured as an MCP server named "webmvc-mcp-server". It's configured to be of type SYNC and has debugging enabled for Spring AI and MCP-related components.
 
 ## Usage
 
