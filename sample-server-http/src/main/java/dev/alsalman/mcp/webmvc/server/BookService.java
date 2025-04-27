@@ -25,8 +25,8 @@ public class BookService {
     void init() {
         books.addAll(
                 List.of(
-                    new Book("Art of Java", "Art of Java"),
-                    new Book("Art of MCP", "Learn how to use MCP")
+                    new Book("Art of Java", "Art of Java","book"),
+                    new Book("Art of MCP", "Learn how to use MCP","book")
                 )
         );
     }

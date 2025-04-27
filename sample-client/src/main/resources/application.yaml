@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: sample-client
+  ai:
+    mcp:
+      client:
+        sse:
+          connections:
+            server1:
+              url: http://localhost:8081
+        #stdio:
+        #  servers-configuration: classpath:mcp-servers.json
+        toolcallback:
+          enabled: true
+    openai:
+      api-key: ${OPENAI_API_KEY}
+
+logging:
+  level:
+    io:
+      modelcontextprotocol:
+        client: WARN
+        spec: WARN

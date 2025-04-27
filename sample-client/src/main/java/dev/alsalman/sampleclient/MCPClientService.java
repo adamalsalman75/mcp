@@ -19,7 +19,7 @@ public class MCPClientService {
         return client.prompt("What tools are available").call().content();
     }
 
-    public String listCourses() {
-        return client.prompt("Which courses are available").call().content();
+    public String adam() {
+        return client.prompt("Which does Adam offer").call().content();
     }
 }

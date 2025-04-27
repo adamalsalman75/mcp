@@ -1,14 +1,9 @@
 package dev.alsalman.sampleclient;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
-
 @RestController
-@RequestMapping("/client")
 public class MCPClientController {
 
     private final MCPClientService mcpClientService;
@@ -22,8 +17,8 @@ public class MCPClientController {
         return mcpClientService.listAvailableTools();
     }
 
-    @GetMapping("/courses")
+    @GetMapping("/adam")
     public String getCourses() {
-        return mcpClientService.listCourses();
+        return mcpClientService.adam();
     }
 }
