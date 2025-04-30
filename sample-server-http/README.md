@@ -22,7 +22,31 @@ The server is configured as an MCP server named "webmvc-mcp-server". It's config
 
 ## Usage
 
-Start the application and connect to it using an MCP client, such as the sample-client module.
+### Prerequisites
+
+- Java 21 or later
+- Maven
+
+### Running the Application
+
+1. Build the application:
+   ```bash
+   mvn clean package
+   ```
+
+2. Run the application:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+   Alternatively, you can run the JAR file directly:
+   ```bash
+   java -jar target/sample-server-http-0.0.1-SNAPSHOT.jar
+   ```
+
+3. The server will start on port 8081 by default. You can connect to it using an MCP client, such as the sample-client module.
+
+> **Note**: Unlike the sample-client module, this server does not require an OpenAI API key to run.
 
 ## CI/CD
 
