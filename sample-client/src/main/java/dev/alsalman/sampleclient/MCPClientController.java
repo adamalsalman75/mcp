@@ -13,17 +13,17 @@ public class MCPClientController {
     }
 
     @GetMapping("/tools")
-    public String getAvailableTools() {
+    public AvailableTools getAvailableTools() {
         return mcpClientService.listAvailableTools();
     }
 
     @GetMapping("/adam")
-    public String getCourses() {
+    public AdamOfferings getCourses() {
         return mcpClientService.adam();
     }
 
     @GetMapping("/github")
-    public String getGithubMetrics() {
+    public GitHubMetricsResponse getGithubMetrics() {
         return mcpClientService.gitlabMetrics();
     }
 }

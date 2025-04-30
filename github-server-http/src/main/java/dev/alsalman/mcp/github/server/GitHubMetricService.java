@@ -7,37 +7,40 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class GitHubMetricService {
 
     private static final Logger log = LoggerFactory.getLogger(GitHubMetricService.class);
-    private final List<GitHubMetric> metrics = new ArrayList<>();
+    protected GitHubUserMetrics userMetrics;
     private final RestClient restClient;
     private static final String GITHUB_USER = "adamalsalman75";
     private static final String GITHUB_API_URL = "https://api.github.com";
 
-    public GitHubMetricService() {
-        this.restClient = RestClient.builder()
+    /**
+     * Constructor that accepts a RestClient.Builder for dependency injection.
+     * This allows for easier testing with mocked RestClient.
+     * 
+     * @param restClientBuilder the RestClient.Builder to use for creating the RestClient
+     */
+    public GitHubMetricService(RestClient.Builder restClientBuilder) {
+        this.restClient = restClientBuilder
                 .baseUrl(GITHUB_API_URL)
                 .defaultHeader("Accept", "application/vnd.github.v3+json")
                 .build();
     }
 
     @Tool(name="github-metrics", description = "Get GitHub metrics for adamalsalman75 (Adam Al-Salman)")
-    public List<GitHubMetric> getMetrics() {
+    public GitHubUserMetrics getMetrics() {
         log.info("Getting GitHub metrics for {}", GITHUB_USER);
-        return metrics;
+        return userMetrics;
     }
 
     @PostConstruct
-    void init() {
+    public void init() {
         fetchUserData();
     }
 
-    private void fetchUserData() {
+    protected void fetchUserData() {
         log.info("Fetching GitHub user data for {}", GITHUB_USER);
 
         try {
@@ -46,21 +49,22 @@ public class GitHubMetricService {
                     .retrieve()
                     .body(UserData.class);
 
-            metrics.clear();
-            metrics.add(new GitHubMetric("Public Repositories", String.valueOf(userData.publicRepos()), "count"));
-            metrics.add(new GitHubMetric("Followers", String.valueOf(userData.followers()), "count"));
-            metrics.add(new GitHubMetric("Following", String.valueOf(userData.following()), "count"));
-            metrics.add(new GitHubMetric("Account Created", userData.createdAt(), "date"));
-            metrics.add(new GitHubMetric("Account Updated", userData.updatedAt(), "date"));
-            log.info("GitHub metrics updated: {}", metrics);
+            userMetrics = GitHubUserMetrics.of(
+                userData.publicRepos(),
+                userData.followers(),
+                userData.following(),
+                userData.createdAt(),
+                userData.updatedAt()
+            );
+            log.info("GitHub metrics updated: {}", userMetrics);
         } catch (Exception error) {
             log.error("Error fetching GitHub user data", error);
-            metrics.add(new GitHubMetric("Error", "Failed to fetch GitHub data", "error"));
+            userMetrics = GitHubUserMetrics.error("Failed to fetch GitHub data");
         }
     }
 
     // Simple data record to map GitHub API response
-    private static record UserData(
+    private record UserData(
             int public_repos,  // GitHub API uses snake_case
             int followers,
             int following,

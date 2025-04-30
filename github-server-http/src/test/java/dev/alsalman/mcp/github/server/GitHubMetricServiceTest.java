@@ -1,44 +1,92 @@
 package dev.alsalman.mcp.github.server;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
+import org.springframework.web.client.RestClient;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 public class GitHubMetricServiceTest {
 
-    @Autowired
-    private GitHubMetricService gitHubMetricService;
+    /**
+     * Test subclass of GitHubMetricService that overrides the fetchUserData method
+     * to provide test data instead of making real API calls.
+     */
+    static class TestGitHubMetricService extends GitHubMetricService {
+        private final boolean simulateError;
+
+        public TestGitHubMetricService(boolean simulateError) {
+            super(RestClient.builder()); // The RestClient won't be used
+            this.simulateError = simulateError;
+        }
+
+        @Override
+        protected void fetchUserData() {
+            if (simulateError) {
+                // Simulate an error
+                userMetrics = GitHubUserMetrics.error("Failed to fetch GitHub data");
+            } else {
+                // Provide test data
+                userMetrics = GitHubUserMetrics.of(
+                    10,  // publicRepositories
+                    20,  // followers
+                    5,   // following
+                    "2020-01-01T00:00:00Z",  // accountCreatedAt
+                    "2023-05-15T12:30:45Z"   // accountUpdatedAt
+                );
+            }
+        }
+    }
+
+    private TestGitHubMetricService gitHubMetricService;
+
+    @BeforeEach
+    void setUp() {
+        // Create the test service with no error
+        gitHubMetricService = new TestGitHubMetricService(false);
+        // Initialize the service (this would normally happen automatically via @PostConstruct)
+        gitHubMetricService.init();
+    }
 
     @Test
-    void testGetMetrics() {
-        List<GitHubMetric> metrics = gitHubMetricService.getMetrics();
+    void testGetMetricsSuccess() {
+        // Get the metrics from the service
+        GitHubUserMetrics metrics = gitHubMetricService.getMetrics();
 
         // Print metrics for debugging
         System.out.println("[DEBUG_LOG] GitHub metrics: " + metrics);
 
-        // Verify that metrics are not empty
-        assertFalse(metrics.isEmpty(), "Metrics should not be empty");
+        // Verify that metrics object is not null
+        assertNotNull(metrics, "Metrics should not be null");
 
-        // Verify that numeric metrics have non-zero values (except followers and following which can be zero)
-        for (GitHubMetric metric : metrics) {
-            if ("count".equals(metric.type())) {
-                if (!metric.name().equals("Followers") && !metric.name().equals("Following")) {
-                    assertNotEquals("0", metric.value(), "Count metric should not be zero: " + metric.name());
-                } else {
-                    // For followers and following, we just verify they are valid integers
-                    assertNotNull(metric.value(), "Followers/Following metric should not be null: " + metric.name());
-                    assertTrue(metric.value().matches("\\d+"), "Followers/Following metric should be a valid integer: " + metric.name());
-                }
-            }
-            if ("date".equals(metric.type())) {
-                assertNotNull(metric.value(), "Date metric should not be null: " + metric.name());
-                assertFalse(metric.value().isEmpty(), "Date metric should not be empty: " + metric.name());
-            }
-        }
+        // Verify that there is no error
+        assertFalse(metrics.hasError(), "Metrics should not have an error");
+
+        // Verify the exact values from our test data
+        assertEquals(10, metrics.publicRepositories(), "Public repositories count should match test data");
+        assertEquals(20, metrics.followers(), "Followers count should match test data");
+        assertEquals(5, metrics.following(), "Following count should match test data");
+        assertEquals("2020-01-01T00:00:00Z", metrics.accountCreatedAt(), "Account created date should match test data");
+        assertEquals("2023-05-15T12:30:45Z", metrics.accountUpdatedAt(), "Account updated date should match test data");
+    }
+
+    @Test
+    void testGetMetricsError() {
+        // Create a test service that simulates an error
+        TestGitHubMetricService errorService = new TestGitHubMetricService(true);
+        errorService.init();
+
+        // Get the metrics from the service
+        GitHubUserMetrics metrics = errorService.getMetrics();
+
+        // Print metrics for debugging
+        System.out.println("[DEBUG_LOG] GitHub metrics with error: " + metrics);
+
+        // Verify that metrics object is not null
+        assertNotNull(metrics, "Metrics should not be null");
+
+        // Verify that there is an error
+        assertTrue(metrics.hasError(), "Metrics should have an error");
+        assertEquals("Failed to fetch GitHub data", metrics.errorMessage(), "Error message should match expected");
     }
 }
