@@ -33,3 +33,15 @@ The following GitHub metrics are fetched:
 - Following
 - Account Created
 - Account Updated
+
+## CI/CD
+
+This module uses GitHub Actions for continuous integration and delivery. The workflow is defined in `.github/workflows/github-server-http.yml` and includes:
+
+- Building and testing the module on every push and pull request to the main branch that affects this module
+- Setting up Java 21
+- Caching Maven dependencies
+- Building the project with Maven
+- Running tests
+
+The workflow is triggered automatically when changes are made to the module or its workflow file.

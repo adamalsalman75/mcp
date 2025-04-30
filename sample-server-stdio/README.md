@@ -19,3 +19,15 @@ The server is configured as an MCP server named "adam-mcp-server" with version 0
 ## Usage
 
 The server is typically launched by an MCP client, such as the sample-client module, which executes the JAR file and communicates with it via standard I/O.
+
+## CI/CD
+
+This module uses GitHub Actions for continuous integration and delivery. The workflow is defined in `.github/workflows/sample-server-stdio.yml` and includes:
+
+- Building and testing the module on every push and pull request to the main branch that affects this module
+- Setting up Java 21
+- Caching Maven dependencies
+- Building the project with Maven
+- Running tests
+
+The workflow is triggered automatically when changes are made to the module or its workflow file.

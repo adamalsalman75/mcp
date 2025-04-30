@@ -44,3 +44,15 @@ By default, the Sample Client is configured to connect to the Sample Server STDI
 - Spring AI
 - Model Context Protocol (MCP)
 - Server-Sent Events (SSE)
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and delivery. The following workflows are available:
+
+- **Main CI**: Builds and tests all modules on every push and pull request to the main branch.
+- **Sample Client CI**: Builds and tests the Sample Client module when changes are made to that module.
+- **Sample Server HTTP CI**: Builds and tests the Sample Server HTTP module when changes are made to that module.
+- **Sample Server STDIO CI**: Builds and tests the Sample Server STDIO module when changes are made to that module.
+- **GitHub Server HTTP CI**: Builds and tests the GitHub Server HTTP module when changes are made to that module.
+
+Each workflow sets up Java 21, caches Maven dependencies, builds the project with Maven, and runs tests.

@@ -1,0 +1,42 @@
+name: Main CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Build and Test Sample Client
+      run: |
+        mvn -B package --file sample-client/pom.xml
+        mvn -B test --file sample-client/pom.xml
+    
+    - name: Build and Test Sample Server HTTP
+      run: |
+        mvn -B package --file sample-server-http/pom.xml
+        mvn -B test --file sample-server-http/pom.xml
+    
+    - name: Build and Test Sample Server STDIO
+      run: |
+        mvn -B package --file sample-server-stdio/pom.xml
+        mvn -B test --file sample-server-stdio/pom.xml
+    
+    - name: Build and Test GitHub Server HTTP
+      run: |
+        mvn -B package --file github-server-http/pom.xml
+        mvn -B test --file github-server-http/pom.xml
