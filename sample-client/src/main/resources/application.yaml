@@ -6,8 +6,10 @@ spring:
       client:
         sse:
           connections:
-            server1:
+            sample-server-http:
               url: http://localhost:8081
+            github-server-http:
+              url: http://localhost:8082
         #stdio:
         #  servers-configuration: classpath:mcp-servers.json
         toolcallback:

@@ -19,6 +19,10 @@ public class MCPClientService {
         return client.prompt("What tools are available").call().content();
     }
 
+    public String gitlabMetrics() {
+        return client.prompt("What can you tell me about Adam Al-Salman and github").call().content();
+    }
+
     public String adam() {
         return client.prompt("Which does Adam offer").call().content();
     }

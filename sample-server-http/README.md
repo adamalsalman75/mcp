@@ -1,6 +1,6 @@
 # Sample Server HTTP
 
-This module is a Spring Boot application that implements a Model Context Protocol (MCP) server using HTTP and Server-Sent Events (SSE) for communication. It provides tools and services that can be accessed by MCP clients.
+This module is a Spring Boot application that implements a Model Context Protocol (MCP) server using HTTP and Server-Sent Events (SSE) for communication. It provides a BookService as a tool that can be accessed by MCP clients.
 
 ## Features
 

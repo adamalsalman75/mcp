@@ -21,4 +21,9 @@ public class MCPClientController {
     public String getCourses() {
         return mcpClientService.adam();
     }
+
+    @GetMapping("/github")
+    public String getGithubMetrics() {
+        return mcpClientService.gitlabMetrics();
+    }
 }
