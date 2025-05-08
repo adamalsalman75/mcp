@@ -113,45 +113,6 @@ public class MCPClientControllerTest {
                 .andExpect(jsonPath("$.errorMessage").value("Test error message"));
     }
 
-    @Test
-    void testGetGithubMetrics() throws Exception {
-        // Create test data
-        GitHubMetricsResponse response = GitHubMetricsResponse.of(
-                10, 20, 5, "2020-01-01T00:00:00Z", "2023-05-15T12:30:45Z"
-        );
-
-        // Configure the mock service
-        when(mcpClientService.gitlabMetrics()).thenReturn(response);
-
-        // Perform the request and verify the response
-        mockMvc.perform(get("/github"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.publicRepositories").value(10))
-                .andExpect(jsonPath("$.followers").value(20))
-                .andExpect(jsonPath("$.following").value(5))
-                .andExpect(jsonPath("$.accountCreatedAt").value("2020-01-01T00:00:00Z"))
-                .andExpect(jsonPath("$.accountUpdatedAt").value("2023-05-15T12:30:45Z"))
-                .andExpect(jsonPath("$.errorMessage").doesNotExist());
-    }
-
-    @Test
-    void testGetGithubMetricsError() throws Exception {
-        // Create test data
-        GitHubMetricsResponse response = GitHubMetricsResponse.error("Test error message");
-
-        // Configure the mock service
-        when(mcpClientService.gitlabMetrics()).thenReturn(response);
-
-        // Perform the request and verify the response
-        mockMvc.perform(get("/github"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.publicRepositories").value(0))
-                .andExpect(jsonPath("$.followers").value(0))
-                .andExpect(jsonPath("$.following").value(0))
-                .andExpect(jsonPath("$.accountCreatedAt").doesNotExist())
-                .andExpect(jsonPath("$.accountUpdatedAt").doesNotExist())
-                .andExpect(jsonPath("$.errorMessage").value("Test error message"));
-    }
 
     @Test
     void testBookQueryWithDefaultQuery() throws Exception {

@@ -24,17 +24,8 @@ public class MCPClientController {
     }
 
     @GetMapping("/books/query")
-    public BookOfferings query(@RequestParam(value = "query", defaultValue = "Return all books with a max price of 50.0") String query) {
+    public BookOfferings query(@RequestParam(value = "query") String query) {
         return mcpClientService.bookQuery(query);
     }
 
-    @GetMapping("/books/recommendations")
-    public BookOfferings getBookRecommendations() {
-        return mcpClientService.getRecommendedBooks();
-    }
-
-    @GetMapping("/github")
-    public GitHubMetricsResponse getGithubMetrics() {
-        return mcpClientService.gitlabMetrics();
-    }
 }

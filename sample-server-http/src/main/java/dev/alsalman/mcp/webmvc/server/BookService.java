@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -22,62 +20,6 @@ public class BookService {
     public List<Book> listBooks() {
         log.info("Listing all books");
         return books;
-    }
-
-    @Tool(name = "find-books-by-category", description = "Find books by category")
-    public List<Book> findBooksByCategory(String category) {
-        log.info("Finding books by category: {}", category);
-        return books.stream()
-                .filter(book -> book.categories().stream()
-                        .map(String::toLowerCase)
-                        .collect(Collectors.toSet())
-                        .contains(category.toLowerCase()))
-                .collect(Collectors.toList());
-    }
-
-    @Tool(name = "find-books-by-author", description = "Find books by author")
-    public List<Book> findBooksByAuthor(String author) {
-        log.info("Finding books by author: {}", author);
-        return books.stream()
-                .filter(book -> book.author().equalsIgnoreCase(author))
-                .collect(Collectors.toList());
-    }
-
-    @Tool(name = "get-book-by-isbn", description = "Get book details by ISBN")
-    public Book getBookByIsbn(String isbn) {
-        log.info("Getting book by ISBN: {}", isbn);
-        return books.stream()
-                .filter(book -> book.isbn().equals(isbn))
-                .findFirst()
-                .orElse(null);
-    }
-
-    @Tool(name = "get-books-by-rating", description = "Get books with rating above specified value")
-    public List<Book> getBooksByRating(double minRating) {
-        log.info("Finding books with rating above: {}", minRating);
-        return books.stream()
-                .filter(book -> book.averageRating() >= minRating)
-                .sorted(Comparator.comparing(Book::averageRating).reversed())
-                .collect(Collectors.toList());
-    }
-
-    @Tool(name = "get-books-published-after", description = "Get books published after specified date (format: yyyy-MM-dd)")
-    public List<Book> getBooksPublishedAfter(String dateStr) {
-        LocalDate date = LocalDate.parse(dateStr);
-        log.info("Finding books published after: {}", date);
-        return books.stream()
-                .filter(book -> book.publicationDate().isAfter(date))
-                .sorted(Comparator.comparing(Book::publicationDate).reversed())
-                .collect(Collectors.toList());
-    }
-
-    @Tool(name = "get-top-rated-books", description = "Get top rated books (limited to specified count)")
-    public List<Book> getTopRatedBooks(int count) {
-        log.info("Getting top {} rated books", count);
-        return books.stream()
-                .sorted(Comparator.comparing(Book::averageRating).reversed())
-                .limit(count)
-                .collect(Collectors.toList());
     }
 
     @PostConstruct

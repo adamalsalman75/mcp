@@ -17,23 +17,15 @@ public class MCPClientService {
 
     public AvailableTools listAvailableTools() {
         try {
-            return client.prompt("What tools are available").call().entity(AvailableTools.class);
+            return client.prompt().user("What tools are available").call().entity(AvailableTools.class);
         } catch (Exception e) {
             return AvailableTools.error("Failed to retrieve available tools: " + e.getMessage());
         }
     }
 
-    public GitHubMetricsResponse gitlabMetrics() {
-        try {
-            return client.prompt("What can you tell me about Adam Al-Salman and github").call().entity(GitHubMetricsResponse.class);
-        } catch (Exception e) {
-            return GitHubMetricsResponse.error("Failed to retrieve GitHub metrics: " + e.getMessage());
-        }
-    }
-
     public BookOfferings listAllBooks() {
         try {
-            return client.prompt("List all available books that we offer").call().entity(BookOfferings.class);
+            return client.prompt().user("List all available books that we offer").call().entity(BookOfferings.class);
         } catch (Exception e) {
             return BookOfferings.error("Failed to retrieve book list: " + e.getMessage());
         }
@@ -41,17 +33,18 @@ public class MCPClientService {
 
     public BookOfferings bookQuery(String query) {
         try {
-            return client.prompt(query).call().entity(BookOfferings.class);
+            return client
+                    .prompt()
+                    .system("""
+                You are a knowledgeable book assistant with access to our book catalog.
+                If the query is not about books then please respond with an error message.
+                """)
+                    .user(query)
+                    .call()
+                    .entity(BookOfferings.class);
         } catch (Exception e) {
-            return BookOfferings.error("Failed to analyze reading trends: " + e.getMessage());
+            return BookOfferings.error(e.getMessage());
         }
     }
 
-    public BookOfferings getRecommendedBooks() {
-        try {
-            return client.prompt("Provide top three book recommendations based on popularity and ratings").call().entity(BookOfferings.class);
-        } catch (Exception e) {
-            return BookOfferings.error("Failed to get book recommendations: " + e.getMessage());
-        }
-    }
 }
