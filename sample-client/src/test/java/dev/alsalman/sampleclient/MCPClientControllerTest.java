@@ -152,4 +152,68 @@ public class MCPClientControllerTest {
                 .andExpect(jsonPath("$.accountUpdatedAt").doesNotExist())
                 .andExpect(jsonPath("$.errorMessage").value("Test error message"));
     }
+
+    @Test
+    void testBookQueryWithDefaultQuery() throws Exception {
+        // Create test data
+        List<BookOfferings.Book> books = Arrays.asList(
+                new BookOfferings.Book("Book 1", "Description 1", "type1"),
+                new BookOfferings.Book("Book 2", "Description 2", "type2")
+        );
+        BookOfferings bookOfferings = BookOfferings.of(books);
+
+        // Configure the mock service
+        when(mcpClientService.bookQuery("Return all books with a max price of 50.0")).thenReturn(bookOfferings);
+
+        // Perform the request and verify the response
+        mockMvc.perform(get("/books/query"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.books").isArray())
+                .andExpect(jsonPath("$.books.length()").value(2))
+                .andExpect(jsonPath("$.books[0].title").value("Book 1"))
+                .andExpect(jsonPath("$.books[0].description").value("Description 1"))
+                .andExpect(jsonPath("$.books[0].type").value("type1"))
+                .andExpect(jsonPath("$.books[1].title").value("Book 2"))
+                .andExpect(jsonPath("$.books[1].description").value("Description 2"))
+                .andExpect(jsonPath("$.books[1].type").value("type2"))
+                .andExpect(jsonPath("$.errorMessage").doesNotExist());
+    }
+
+    @Test
+    void testBookQueryWithCustomQuery() throws Exception {
+        // Create test data
+        List<BookOfferings.Book> books = Arrays.asList(
+                new BookOfferings.Book("Custom Book", "Custom Description", "custom-type")
+        );
+        BookOfferings bookOfferings = BookOfferings.of(books);
+
+        // Configure the mock service
+        String customQuery = "Return all books with a max price of 30.0";
+        when(mcpClientService.bookQuery(customQuery)).thenReturn(bookOfferings);
+
+        // Perform the request and verify the response
+        mockMvc.perform(get("/books/query").param("query", customQuery))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.books").isArray())
+                .andExpect(jsonPath("$.books.length()").value(1))
+                .andExpect(jsonPath("$.books[0].title").value("Custom Book"))
+                .andExpect(jsonPath("$.books[0].description").value("Custom Description"))
+                .andExpect(jsonPath("$.books[0].type").value("custom-type"))
+                .andExpect(jsonPath("$.errorMessage").doesNotExist());
+    }
+
+    @Test
+    void testBookQueryError() throws Exception {
+        // Create test data
+        BookOfferings bookOfferings = BookOfferings.error("Test error message");
+
+        // Configure the mock service
+        when(mcpClientService.bookQuery("Return all books with a max price of 50.0")).thenReturn(bookOfferings);
+
+        // Perform the request and verify the response
+        mockMvc.perform(get("/books/query"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.books").doesNotExist())
+                .andExpect(jsonPath("$.errorMessage").value("Test error message"));
+    }
 }

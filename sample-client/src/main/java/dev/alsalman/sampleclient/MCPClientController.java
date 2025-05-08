@@ -1,6 +1,7 @@
 package dev.alsalman.sampleclient;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,8 +24,8 @@ public class MCPClientController {
     }
 
     @GetMapping("/books/query")
-    public BookOfferings query() {
-        return mcpClientService.bookQuery();
+    public BookOfferings query(@RequestParam(value = "query", defaultValue = "Return all books with a max price of 50.0") String query) {
+        return mcpClientService.bookQuery(query);
     }
 
     @GetMapping("/books/recommendations")

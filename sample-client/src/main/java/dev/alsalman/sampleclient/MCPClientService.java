@@ -39,9 +39,9 @@ public class MCPClientService {
         }
     }
 
-    public BookOfferings bookQuery() {
+    public BookOfferings bookQuery(String query) {
         try {
-            return client.prompt("Return all books with a max price of 50.0").call().entity(BookOfferings.class);
+            return client.prompt(query).call().entity(BookOfferings.class);
         } catch (Exception e) {
             return BookOfferings.error("Failed to analyze reading trends: " + e.getMessage());
         }
