@@ -31,11 +31,27 @@ public class MCPClientService {
         }
     }
 
-    public AdamOfferings adam() {
+    public BookOfferings listAllBooks() {
         try {
-            return client.prompt("Which does Adam offer").call().entity(AdamOfferings.class);
+            return client.prompt("List all available books that we offer").call().entity(BookOfferings.class);
         } catch (Exception e) {
-            return AdamOfferings.error("Failed to retrieve Adam's offerings: " + e.getMessage());
+            return BookOfferings.error("Failed to retrieve book list: " + e.getMessage());
+        }
+    }
+
+    public BookOfferings bookQuery() {
+        try {
+            return client.prompt("Return all books with a max price of 50.0").call().entity(BookOfferings.class);
+        } catch (Exception e) {
+            return BookOfferings.error("Failed to analyze reading trends: " + e.getMessage());
+        }
+    }
+
+    public BookOfferings getRecommendedBooks() {
+        try {
+            return client.prompt("Provide top three book recommendations based on popularity and ratings").call().entity(BookOfferings.class);
+        } catch (Exception e) {
+            return BookOfferings.error("Failed to get book recommendations: " + e.getMessage());
         }
     }
 }

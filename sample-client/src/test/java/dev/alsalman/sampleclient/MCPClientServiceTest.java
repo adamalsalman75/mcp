@@ -2,10 +2,7 @@ package dev.alsalman.sampleclient;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.tool.ToolCallbackProvider;
 
 import java.util.Arrays;
 import java.util.List;
@@ -101,37 +98,37 @@ public class MCPClientServiceTest {
     }
 
     @Test
-    void testAdamOfferingsCreation() {
+    void testBookOfferingsCreation() {
         // Create test data
-        List<AdamOfferings.Book> books = Arrays.asList(
-                new AdamOfferings.Book("Book 1", "Description 1", "type1"),
-                new AdamOfferings.Book("Book 2", "Description 2", "type2")
+        List<BookOfferings.Book> books = Arrays.asList(
+                new BookOfferings.Book("Book 1", "Description 1", "type1"),
+                new BookOfferings.Book("Book 2", "Description 2", "type2")
         );
 
-        // Create AdamOfferings instance
-        AdamOfferings adamOfferings = AdamOfferings.of(books);
+        // Create BookOfferings instance
+        BookOfferings bookOfferings = BookOfferings.of(books);
 
         // Verify the instance
-        assertNotNull(adamOfferings, "AdamOfferings should not be null");
-        assertFalse(adamOfferings.hasError(), "Should not have an error");
-        assertNull(adamOfferings.errorMessage(), "Error message should be null");
-        assertEquals(books, adamOfferings.books(), "Books list should match");
-        assertEquals(2, adamOfferings.books().size(), "Should have 2 books");
-        assertEquals("Book 1", adamOfferings.books().get(0).title(), "First book title should match");
-        assertEquals("Description 1", adamOfferings.books().get(0).description(), "First book description should match");
-        assertEquals("type1", adamOfferings.books().get(0).type(), "First book type should match");
+        assertNotNull(bookOfferings, "BookOfferings should not be null");
+        assertFalse(bookOfferings.hasError(), "Should not have an error");
+        assertNull(bookOfferings.errorMessage(), "Error message should be null");
+        assertEquals(books, bookOfferings.books(), "Books list should match");
+        assertEquals(2, bookOfferings.books().size(), "Should have 2 books");
+        assertEquals("Book 1", bookOfferings.books().get(0).title(), "First book title should match");
+        assertEquals("Description 1", bookOfferings.books().get(0).description(), "First book description should match");
+        assertEquals("type1", bookOfferings.books().get(0).type(), "First book type should match");
     }
 
     @Test
-    void testAdamOfferingsError() {
-        // Create AdamOfferings instance with error
+    void testBookOfferingsError() {
+        // Create BookOfferings instance with error
         String errorMessage = "Test error message";
-        AdamOfferings adamOfferings = AdamOfferings.error(errorMessage);
+        BookOfferings bookOfferings = BookOfferings.error(errorMessage);
 
         // Verify the instance
-        assertNotNull(adamOfferings, "AdamOfferings should not be null");
-        assertTrue(adamOfferings.hasError(), "Should have an error");
-        assertEquals(errorMessage, adamOfferings.errorMessage(), "Error message should match");
-        assertNull(adamOfferings.books(), "Books list should be null");
+        assertNotNull(bookOfferings, "BookOfferings should not be null");
+        assertTrue(bookOfferings.hasError(), "Should have an error");
+        assertEquals(errorMessage, bookOfferings.errorMessage(), "Error message should match");
+        assertNull(bookOfferings.books(), "Books list should be null");
     }
 }

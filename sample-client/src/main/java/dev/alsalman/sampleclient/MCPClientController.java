@@ -17,9 +17,19 @@ public class MCPClientController {
         return mcpClientService.listAvailableTools();
     }
 
-    @GetMapping("/adam")
-    public AdamOfferings getCourses() {
-        return mcpClientService.adam();
+    @GetMapping("/books")
+    public BookOfferings getAllBooks() {
+        return mcpClientService.listAllBooks();
+    }
+
+    @GetMapping("/books/query")
+    public BookOfferings query() {
+        return mcpClientService.bookQuery();
+    }
+
+    @GetMapping("/books/recommendations")
+    public BookOfferings getBookRecommendations() {
+        return mcpClientService.getRecommendedBooks();
     }
 
     @GetMapping("/github")

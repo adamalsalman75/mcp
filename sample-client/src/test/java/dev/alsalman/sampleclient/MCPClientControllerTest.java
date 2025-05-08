@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -74,19 +73,19 @@ public class MCPClientControllerTest {
     }
 
     @Test
-    void testGetCourses() throws Exception {
+    void testGetBooks() throws Exception {
         // Create test data
-        List<AdamOfferings.Book> books = Arrays.asList(
-                new AdamOfferings.Book("Book 1", "Description 1", "type1"),
-                new AdamOfferings.Book("Book 2", "Description 2", "type2")
+        List<BookOfferings.Book> books = Arrays.asList(
+                new BookOfferings.Book("Book 1", "Description 1", "type1"),
+                new BookOfferings.Book("Book 2", "Description 2", "type2")
         );
-        AdamOfferings adamOfferings = AdamOfferings.of(books);
+        BookOfferings bookOfferings = BookOfferings.of(books);
 
         // Configure the mock service
-        when(mcpClientService.adam()).thenReturn(adamOfferings);
+        when(mcpClientService.listAllBooks()).thenReturn(bookOfferings);
 
         // Perform the request and verify the response
-        mockMvc.perform(get("/adam"))
+        mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.books").isArray())
                 .andExpect(jsonPath("$.books.length()").value(2))
@@ -100,15 +99,15 @@ public class MCPClientControllerTest {
     }
 
     @Test
-    void testGetCoursesError() throws Exception {
+    void testGetBooksError() throws Exception {
         // Create test data
-        AdamOfferings adamOfferings = AdamOfferings.error("Test error message");
+        BookOfferings bookOfferings = BookOfferings.error("Test error message");
 
         // Configure the mock service
-        when(mcpClientService.adam()).thenReturn(adamOfferings);
+        when(mcpClientService.listAllBooks()).thenReturn(bookOfferings);
 
         // Perform the request and verify the response
-        mockMvc.perform(get("/adam"))
+        mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.books").doesNotExist())
                 .andExpect(jsonPath("$.errorMessage").value("Test error message"));
