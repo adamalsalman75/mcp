@@ -56,8 +56,10 @@ This module is a Spring Boot application that uses Spring AI to interact with Mo
 
 4. Access the REST endpoints to interact with the connected MCP servers:
    - http://localhost:8080/tools
-   - http://localhost:8080/adam
-   - http://localhost:8080/github
+
+```
+curl -G http://localhost:8080/query --data-urlencode "query=what non fictional books do 0we have please format output as CSV"
+```
 
 ## CI/CD
 
