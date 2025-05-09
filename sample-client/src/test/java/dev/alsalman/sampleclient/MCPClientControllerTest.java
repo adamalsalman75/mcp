@@ -124,10 +124,11 @@ public class MCPClientControllerTest {
         BookOfferings bookOfferings = BookOfferings.of(books);
 
         // Configure the mock service
-        when(mcpClientService.bookQuery("Return all books with a max price of 50.0")).thenReturn(bookOfferings);
+        String defaultQuery = "Return all books with a max price of 50.0";
+        when(mcpClientService.bookQuery(defaultQuery)).thenReturn(bookOfferings);
 
         // Perform the request and verify the response
-        mockMvc.perform(get("/books/query"))
+        mockMvc.perform(get("/books/query").param("query", defaultQuery))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.books").isArray())
                 .andExpect(jsonPath("$.books.length()").value(2))
@@ -169,10 +170,11 @@ public class MCPClientControllerTest {
         BookOfferings bookOfferings = BookOfferings.error("Test error message");
 
         // Configure the mock service
-        when(mcpClientService.bookQuery("Return all books with a max price of 50.0")).thenReturn(bookOfferings);
+        String defaultQuery = "Return all books with a max price of 50.0";
+        when(mcpClientService.bookQuery(defaultQuery)).thenReturn(bookOfferings);
 
         // Perform the request and verify the response
-        mockMvc.perform(get("/books/query"))
+        mockMvc.perform(get("/books/query").param("query", defaultQuery))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.books").doesNotExist())
                 .andExpect(jsonPath("$.errorMessage").value("Test error message"));

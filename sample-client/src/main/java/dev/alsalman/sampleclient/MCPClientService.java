@@ -47,4 +47,20 @@ public class MCPClientService {
         }
     }
 
+    public String stringQuery(String query) {
+        try {
+            return client
+                    .prompt()
+                    .system("""
+                You are a knowledgeable book assistant with access to our book catalog.
+                If the query is not about books then please respond with an error message.
+                """)
+                    .user(query)
+                    .call()
+                    .content();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
 }

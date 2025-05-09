@@ -24,8 +24,13 @@ public class MCPClientController {
     }
 
     @GetMapping("/books/query")
-    public BookOfferings query(@RequestParam(value = "query") String query) {
+    public BookOfferings bootQuery(@RequestParam(value = "query") String query) {
         return mcpClientService.bookQuery(query);
+    }
+
+    @GetMapping("/query")
+    public String stringQuery(@RequestParam(value = "query") String query) {
+        return mcpClientService.stringQuery(query);
     }
 
 }
